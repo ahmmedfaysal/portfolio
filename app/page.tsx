@@ -119,13 +119,22 @@ const useScrollSpy = (sectionIds: string[], offset: number = 300) => {
   return activeSection;
 };
 
+// // Smooth reveal wrapper component
+// const Reveal = ({ children, delay = 0, className = "" }) => {
+//   const [ref, isVisible] = useIntersectionObserver({ threshold: 0.1, rootMargin: '50px' });
 // Smooth reveal wrapper component
-const Reveal = ({ children, delay = 0, className = "" }) => {
+// Smooth reveal wrapper component
+const Reveal = ({ children, delay = 0, className = "" }: { 
+  children: React.ReactNode; 
+  delay?: number; 
+  className?: string; 
+}) => {
+  // Add this hook instantiation line back in!
   const [ref, isVisible] = useIntersectionObserver({ threshold: 0.1, rootMargin: '50px' });
 
   return (
     <div
-      ref={ref}
+      ref={ref as React.RefObject<HTMLDivElement>} // Typecast the ref cleanly for TypeScript
       className={className}
       style={{
         transition: `all 0.9s cubic-bezier(0.16, 1, 0.3, 1) ${delay}s`,
@@ -143,7 +152,7 @@ export default function Portfolio() {
   const sectionIds = ['home', 'about', 'projects', 'journey', 'contact'];
   const activeSection = useScrollSpy(sectionIds);
 
-  const scrollTo = (id) => {
+  const scrollTo = (id: string) => {
     const element = document.getElementById(id);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
