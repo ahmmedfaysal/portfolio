@@ -89,9 +89,13 @@ const useIntersectionObserver = (options?: IntersectionObserverInit) => {
   return [ref, isVisible];
 };
 
+// // Hook for updating the active nav item based on scroll position
+// const useScrollSpy = (sectionIds, offset = 300) => {
+//   const [activeSection, setActiveSection] = useState(sectionIds[0]);
+
 // Hook for updating the active nav item based on scroll position
-const useScrollSpy = (sectionIds, offset = 300) => {
-  const [activeSection, setActiveSection] = useState(sectionIds[0]);
+const useScrollSpy = (sectionIds: string[], offset: number = 300) => {
+  const [activeSection, setActiveSection] = useState<string>(sectionIds[0]);
 
   useEffect(() => {
     const handleScroll = () => {
