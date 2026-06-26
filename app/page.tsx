@@ -63,9 +63,13 @@ const SiWhatsapp = ({ size = 20, className = "" }) => (
 );
 
 // Hook for scroll-triggered reveal animations
-const useIntersectionObserver = (options) => {
+const useIntersectionObserver = (options?: IntersectionObserverInit) => {
   const [isVisible, setIsVisible] = useState(false);
-  const ref = useRef(null); 
+  const ref = useRef<HTMLElement | null>(null); // Good practice to type the ref as well
+// Hook for scroll-triggered reveal animations
+// const useIntersectionObserver = (options) => {
+//   const [isVisible, setIsVisible] = useState(false);
+//   const ref = useRef(null);
 
   useEffect(() => {
     const observer = new IntersectionObserver(([entry]) => {
@@ -87,7 +91,7 @@ const useIntersectionObserver = (options) => {
 };
 
 // Hook for updating the active nav item based on scroll position
-const useScrollSpy = (sectionIds, offset = 300) => {
+const useScrollSpy = (sectionIds: string[], offset = 300) => {
   const [activeSection, setActiveSection] = useState(sectionIds[0]);
 
   useEffect(() => {
@@ -113,12 +117,17 @@ const useScrollSpy = (sectionIds, offset = 300) => {
 };
 
 // Smooth reveal wrapper component
-const Reveal = ({ children, delay = 0, className = "" }) => {
+const Reveal = ({ children, delay = 0, className = "" }: { 
+  children: React.ReactNode; 
+  delay?: number; 
+  className?: string; 
+}) => {
+  // Add this hook instantiation line back in!
   const [ref, isVisible] = useIntersectionObserver({ threshold: 0.1, rootMargin: '50px' });
 
   return (
     <div
-      ref={ref}
+      ref={ref as React.RefObject<HTMLDivElement>} // Typecast the ref cleanly for TypeScript
       className={className}
       style={{
         transition: `all 0.9s cubic-bezier(0.16, 1, 0.3, 1) ${delay}s`,
@@ -136,7 +145,7 @@ export default function Portfolio() {
   const sectionIds = ['home', 'about', 'projects', 'journey', 'contact'];
   const activeSection = useScrollSpy(sectionIds);
 
-  const scrollTo = (id) => {
+  const scrollTo = (id : string) => {
     const element = document.getElementById(id);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
